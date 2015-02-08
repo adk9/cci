@@ -1699,11 +1699,12 @@ verbs_post_send(cci__conn_t * conn, uint64_t id, void *buffer, uint32_t len,
 	}
 
 	ret = ibv_post_send(vconn->id->qp, &wr, &bad_wr);
-	if (ret == -1) {
+	if (ret) {
 		ret = errno;
 		debug(CCI_DB_MSG,
 		      "unable to send id 0x%" PRIx64
-		      " buffer %p len %u header 0x%x", id, (void*)buffer, len, header);
+		      " buffer %p len %u header 0x%x: %s", id, (void*)buffer, len, header,
+                      strerror(ret));
 	}
 	CCI_EXIT;
 	return ret;
